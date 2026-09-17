@@ -95,6 +95,21 @@ browser. Drop a PNG or JPG into the box, adjust the settings, and click
   instead of rendering plain white-on-black text. (Plain-text downloads are
   always uncolored, since color only makes sense inside the browser.)
 
+### Sharing to Discord
+
+Use the **"Copy for Discord"** button rather than "Copy text" or downloading
+the `.txt` file. It copies the art wrapped in a fenced code block
+(` ``` `), which:
+
+- Forces Discord to render it in a monospace font, so the columns stay
+  aligned (a plain paste uses Discord's normal proportional font and looks
+  scrambled).
+- If the result is still too long for a normal Discord message (2,000
+  characters on a free account, 4,000 with Nitro), the app warns you —
+  Discord otherwise silently turns an oversized paste into a `.txt`
+  attachment instead of inline text. Lower the width slider until the
+  warning disappears.
+
 ## Deploying
 
 This is a static site (no backend), so any static host works. Vercel is the

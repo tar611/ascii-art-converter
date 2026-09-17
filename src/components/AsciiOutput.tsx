@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { asciiGridToText, type AsciiGrid } from '../lib/asciiConverter'
+import { DISCORD_FREE_LIMIT, exceedsDiscordLimit, wrapForDiscord } from '../lib/discordFormat'
 
 interface AsciiOutputProps {
   grid: AsciiGrid
@@ -8,12 +9,21 @@ interface AsciiOutputProps {
 
 export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
   const [copied, setCopied] = useState(false)
+  const [copiedForDiscord, setCopiedForDiscord] = useState(false)
   const text = asciiGridToText(grid)
+  const discordText = wrapForDiscord(text)
+  const tooLongForDiscord = exceedsDiscordLimit(discordText)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 1500)
+  }
+
+  const handleCopyForDiscord = async () => {
+    await navigator.clipboard.writeText(discordText)
+    setCopiedForDiscord(true)
+    setTimeout(() => setCopiedForDiscord(false), 1500)
   }
 
   const handleDownload = () => {
@@ -44,7 +54,13 @@ export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
           : text}
       </pre>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={handleCopyForDiscord}
+          className="rounded border border-indigo-500 bg-indigo-500/10 px-3 py-1.5 text-sm text-indigo-300 hover:bg-indigo-500/20"
+        >
+          {copiedForDiscord ? 'Copied!' : 'Copy for Discord'}
+        </button>
         <button
           onClick={handleCopy}
           className="rounded border border-neutral-700 px-3 py-1.5 text-sm text-neutral-200 hover:bg-neutral-800"
@@ -58,6 +74,14 @@ export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
           Download .txt
         </button>
       </div>
+
+      {tooLongForDiscord && (
+        <p className="text-sm text-amber-400">
+          This is {discordText.length.toLocaleString()} characters — over Discord's {DISCORD_FREE_LIMIT.toLocaleString()}-character
+          message limit (4,000 with Nitro). Lower the width slider until it fits, or Discord will turn the paste into a
+          file attachment instead of inline text.
+        </p>
+      )}
     </div>
   )
 }
