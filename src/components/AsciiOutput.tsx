@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { asciiGridToAnsiText, wrapAnsiForDiscord } from '../lib/ansiFormat'
 import { asciiGridToText, type AsciiGrid } from '../lib/asciiConverter'
 import { DISCORD_FREE_LIMIT, exceedsDiscordLimit, wrapForDiscord } from '../lib/discordFormat'
 
@@ -10,9 +11,14 @@ interface AsciiOutputProps {
 export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
   const [copied, setCopied] = useState(false)
   const [copiedForDiscord, setCopiedForDiscord] = useState(false)
+  const [copiedForDiscordColor, setCopiedForDiscordColor] = useState(false)
+
   const text = asciiGridToText(grid)
   const discordText = wrapForDiscord(text)
   const tooLongForDiscord = exceedsDiscordLimit(discordText)
+
+  const discordAnsiText = wrapAnsiForDiscord(asciiGridToAnsiText(grid))
+  const tooLongForDiscordAnsi = exceedsDiscordLimit(discordAnsiText)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(text)
@@ -24,6 +30,12 @@ export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
     await navigator.clipboard.writeText(discordText)
     setCopiedForDiscord(true)
     setTimeout(() => setCopiedForDiscord(false), 1500)
+  }
+
+  const handleCopyForDiscordColor = async () => {
+    await navigator.clipboard.writeText(discordAnsiText)
+    setCopiedForDiscordColor(true)
+    setTimeout(() => setCopiedForDiscordColor(false), 1500)
   }
 
   const handleDownload = () => {
@@ -45,7 +57,7 @@ export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
           ? grid.map((row, rowIndex) => (
               <div key={rowIndex} className="whitespace-pre">
                 {row.map((cell, colIndex) => (
-                  <span key={colIndex} style={{ color: cell.color }}>
+                  <span key={colIndex} style={{ color: `rgb(${cell.r}, ${cell.g}, ${cell.b})` }}>
                     {cell.char}
                   </span>
                 ))}
@@ -62,6 +74,12 @@ export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
           {copiedForDiscord ? 'Copied!' : 'Copy for Discord'}
         </button>
         <button
+          onClick={handleCopyForDiscordColor}
+          className="rounded border border-fuchsia-500 bg-fuchsia-500/10 px-3 py-1.5 text-sm text-fuchsia-300 hover:bg-fuchsia-500/20"
+        >
+          {copiedForDiscordColor ? 'Copied!' : 'Copy for Discord (color)'}
+        </button>
+        <button
           onClick={handleCopy}
           className="rounded border border-neutral-700 px-3 py-1.5 text-sm text-neutral-200 hover:bg-neutral-800"
         >
@@ -75,11 +93,24 @@ export function AsciiOutput({ grid, colorMode }: AsciiOutputProps) {
         </button>
       </div>
 
+      <p className="text-xs text-neutral-500">
+        "Copy for Discord (color)" only renders on Discord desktop/web — the mobile app shows it as plain text with
+        visible color codes. It also approximates each color as one of 8 fixed terminal colors, not the exact shade.
+      </p>
+
       {tooLongForDiscord && (
         <p className="text-sm text-amber-400">
-          This is {discordText.length.toLocaleString()} characters — over Discord's {DISCORD_FREE_LIMIT.toLocaleString()}-character
-          message limit (4,000 with Nitro). Lower the width slider until it fits, or Discord will turn the paste into a
-          file attachment instead of inline text.
+          Plain version is {discordText.length.toLocaleString()} characters — over Discord's{' '}
+          {DISCORD_FREE_LIMIT.toLocaleString()}-character message limit (4,000 with Nitro). Lower the width slider
+          until it fits, or Discord will turn the paste into a file attachment instead of inline text.
+        </p>
+      )}
+
+      {tooLongForDiscordAnsi && !tooLongForDiscord && (
+        <p className="text-sm text-amber-400">
+          Color version is {discordAnsiText.length.toLocaleString()} characters — over Discord's{' '}
+          {DISCORD_FREE_LIMIT.toLocaleString()}-character message limit (4,000 with Nitro), even though the plain
+          version fits. The color codes add length, so lower the width slider a bit more for the color copy.
         </p>
       )}
     </div>

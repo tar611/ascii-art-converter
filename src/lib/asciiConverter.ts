@@ -1,6 +1,8 @@
 export interface AsciiCell {
   char: string
-  color: string
+  r: number
+  g: number
+  b: number
 }
 
 export type AsciiGrid = AsciiCell[][]
@@ -87,7 +89,9 @@ export function convertImageDataToAsciiGrid(imageData: ImageData, options: Ascii
 
       cells.push({
         char: ramp[rampIndex],
-        color: `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`,
+        r: Math.round(r),
+        g: Math.round(g),
+        b: Math.round(b),
       })
     }
 

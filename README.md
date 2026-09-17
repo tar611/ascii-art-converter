@@ -97,18 +97,26 @@ browser. Drop a PNG or JPG into the box, adjust the settings, and click
 
 ### Sharing to Discord
 
-Use the **"Copy for Discord"** button rather than "Copy text" or downloading
-the `.txt` file. It copies the art wrapped in a fenced code block
-(` ``` `), which:
+Use one of the two "Copy for Discord" buttons rather than "Copy text" or
+downloading the `.txt` file:
 
-- Forces Discord to render it in a monospace font, so the columns stay
-  aligned (a plain paste uses Discord's normal proportional font and looks
-  scrambled).
-- If the result is still too long for a normal Discord message (2,000
-  characters on a free account, 4,000 with Nitro), the app warns you —
-  Discord otherwise silently turns an oversized paste into a `.txt`
-  attachment instead of inline text. Lower the width slider until the
-  warning disappears.
+- **Copy for Discord** — wraps the plain art in a fenced code block
+  (` ``` `), which forces Discord to render it in a monospace font so the
+  columns stay aligned. A plain paste uses Discord's normal proportional
+  font and looks scrambled.
+- **Copy for Discord (color)** — wraps the art in a ` ```ansi ` code block
+  with ANSI color escape codes, so Discord actually renders it in color.
+  Two caveats: it only renders correctly on Discord desktop/web (the
+  mobile app shows the raw color codes as text), and each pixel's color is
+  approximated as the nearest of only 8 fixed terminal colors, not its
+  exact RGB value — Discord's ANSI support doesn't go further than that.
+
+Either way, if the result is still too long for a normal Discord message
+(2,000 characters on a free account, 4,000 with Nitro), the app warns you —
+Discord otherwise silently turns an oversized paste into a `.txt`
+attachment instead of inline text. Lower the width slider until the
+warning disappears. The color version runs a bit longer than the plain one
+for the same width, since the color codes add characters.
 
 ## Deploying
 
