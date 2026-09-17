@@ -7,7 +7,7 @@ import { RAMPS } from './lib/asciiConverter'
 
 const DEFAULT_CONTROLS: AsciiControlsState = {
   columns: 120,
-  rampKey: 'detailed',
+  rampKey: 'classic',
   invert: false,
   colorMode: false,
 }

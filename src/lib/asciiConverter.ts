@@ -18,6 +18,12 @@ export const RAMPS = {
   simple: ' .:-=+*#%@',
   detailed: ' .,:;clodxkO0KXNWM',
   blocks: ' ░▒▓█',
+  // The classic 70-character ramp (Paul Bourke's) behind most old-school
+  // text-mode ASCII art — the kind seen on GameFAQs/BBS-era sites. Its extra
+  // brightness levels and jagged punctuation give a grainier, less "smoothed
+  // out" look than the shorter ramps above.
+  classic:
+    ' .\'`^",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$',
 } as const
 
 // Standard perceptual-luminance weights (ITU-R BT.601): the human eye is far

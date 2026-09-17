@@ -50,6 +50,14 @@ describe('convertImageDataToAsciiGrid', () => {
     expect(grid.every((row) => row.length === 2)).toBe(true)
   })
 
+  it('the classic ramp has 70 characters and the expected endpoints', () => {
+    // Locks in the transcribed ramp string — a single dropped or duplicated
+    // character here would shift every brightness level after it.
+    expect(RAMPS.classic).toHaveLength(70)
+    expect(RAMPS.classic[0]).toBe(' ')
+    expect(RAMPS.classic[RAMPS.classic.length - 1]).toBe('$')
+  })
+
   it('averages the pixels within a cell rather than sampling only one', () => {
     // Two source pixels squeezed into a single output column: one black,
     // one white. A correct box-average lands on mid-gray, not either extreme.

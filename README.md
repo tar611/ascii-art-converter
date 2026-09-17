@@ -82,7 +82,10 @@ browser. Drop a PNG or JPG into the box, adjust the settings, and click
   = more detail, but a much longer wall of text.
 - **Character set** — the "ramp" of characters used to represent
   brightness:
-  - `simple` — 10 characters, classic look (`" .:-=+*#%@"`)
+  - `classic` (default) — the 70-character ramp behind old-school text-mode
+    ASCII art (GameFAQs/BBS-era). More brightness levels and jagged
+    punctuation give a grainier, textured look instead of smooth gradients.
+  - `simple` — 10 characters, minimal look (`" .:-=+*#%@"`)
   - `detailed` — 18 characters, smoother gradients
   - `blocks` — Unicode block shading characters (`░▒▓█`) for a chunkier look
 - **Invert brightness** — flips which end of the ramp maps to
